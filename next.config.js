@@ -1,8 +1,5 @@
 module.exports = {
-  async redirects() {
-    return [
-      { source: '/blog.html', destination: '/blog', permanent: true },
-      { source: '/index.html', destination: '/', permanent: true }
-    ];
-  }
+  output: 'export',
+  trailingSlash: true,
+  basePath: process.env.GITHUB_PAGES === 'true' ? '/ordinary_website' : ''
 };

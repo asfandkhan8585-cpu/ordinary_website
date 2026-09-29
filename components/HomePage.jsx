@@ -1,6 +1,7 @@
 'use client';
 
-    import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
     const LogoMark = () => (
       <svg viewBox="0 0 28 28" className="h-7 w-7" fill="none" aria-hidden="true">
@@ -49,7 +50,7 @@
             </a>
             <div className="hidden items-center gap-6 whitespace-nowrap md:flex">
               <a href="#faq" className="text-sm text-ink/70 transition-colors hover:text-ink">FAQ</a>
-              <a href="/blog" className="text-sm text-ink/70 transition-colors hover:text-ink">Blog posts</a>
+              <a href={`${basePath}/blog/`} className="text-sm text-ink/70 transition-colors hover:text-ink">Blog posts</a>
               <a href="https://www.linkedin.com/" className="text-sm text-ink/70 transition-colors hover:text-ink">View on LinkedIn</a>
               <a href="mailto:?subject=ordinarychat%20waitlist" className="text-sm text-ink/70 transition-colors hover:text-ink">Join waitlist</a>
             </div>
@@ -59,7 +60,7 @@
             </button>
             {menuOpen&&<div className="mobile-menu absolute inset-x-4 top-[4.5rem] flex flex-col rounded-2xl border hairline bg-paper p-2 shadow-float md:hidden">
               <a href="#faq" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">FAQ</a>
-              <a href="/blog" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Blog posts</a>
+              <a href={`${basePath}/blog/`} onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Blog posts</a>
               <a href="https://www.linkedin.com/" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">View on LinkedIn</a>
               <a href="mailto:?subject=ordinarychat%20waitlist" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Join waitlist</a>
               <span className="mx-4 mt-1 border-t hairline pt-3 pb-2 text-sm font-semibold text-clay">Coming soon</span>
@@ -79,7 +80,7 @@
           if (!active || !box.current) return;
           if (!window.lottie) { window.setTimeout(load, 100); return; }
         const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        animation = window.lottie.loadAnimation({ container: box.current, renderer: 'svg', loop: !reduced, autoplay: !reduced, path: '/' + file + '.json' });
+        animation = window.lottie.loadAnimation({ container: box.current, renderer: 'svg', loop: !reduced, autoplay: !reduced, path: basePath + '/' + file + '.json' });
         if (reduced) animation.addEventListener('DOMLoaded', () => animation.goToAndStop(Math.round(animation.totalFrames / 2), true));
         };
         load();

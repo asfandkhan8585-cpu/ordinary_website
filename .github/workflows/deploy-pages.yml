@@ -25,14 +25,24 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Prepare static site
-        run: |
-          mkdir _site
-          cp .nojekyll index.html blog.html post.html styles.css tailwind-config.js animation-assets.js blog.js post.js posts.json gmail.json linkedin.json wave.json _site/
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build static site
+        run: npm run build
+        env:
+          GITHUB_PAGES: 'true'
+          NEXT_PUBLIC_BASE_PATH: '/ordinary_website'
+      - name: Disable Jekyll processing
+        run: touch out/.nojekyll
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: out
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4

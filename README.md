@@ -13,4 +13,4 @@ Open `posts.json` and add one object to the array.
 - Set `featured` to `true` for one post to feature it at the top of the blog page.
 - Add each article paragraph as a separate item in `content`.
 
-The blog index and article metadata are generated from this file during the build. Deploy the Next.js build when publishing changes.
+The blog index and article metadata are generated from this file during the build. The GitHub Actions workflow exports and deploys the static site to GitHub Pages on each push to `main`.
