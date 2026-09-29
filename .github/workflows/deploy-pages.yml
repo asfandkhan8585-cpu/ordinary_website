@@ -28,7 +28,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir _site
-          cp index.html blog.html post.html styles.css tailwind-config.js animation-assets.js blog.js post.js posts.json gmail.json linkedin.json wave.json _site/
+          cp .nojekyll index.html blog.html post.html styles.css tailwind-config.js animation-assets.js blog.js post.js posts.json gmail.json linkedin.json wave.json _site/
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
