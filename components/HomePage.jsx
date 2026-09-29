@@ -182,9 +182,8 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
       return <section className="tone-scroll-section pt-4 pb-16 sm:pt-4 sm:pb-24" aria-label="See one draft rewritten in four tones">
         <div className="tone-sticky"><div className="mx-auto w-full max-w-5xl px-5 sm:px-8">
           <div className="text-center">
-            <span className="text-sm font-semibold uppercase tracking-[.2em] text-olive">{tones[tone]}</span>
-            <h2 className="mt-3 font-display text-3xl font-light text-ink sm:text-5xl">One thought, four ways to say it.</h2>
-            <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-ink/60 sm:text-lg">Choose a tone: <span className="font-semibold text-olive">{tones[tone]}</span></p>
+            <h2 className="font-display text-3xl font-light text-ink sm:text-5xl">One thought, four ways to say it.</h2>
+            <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-ink/60 sm:text-lg"><span className="font-semibold text-olive">{tones[tone]}</span></p>
           </div>
           <div className="tone-stage mt-7 grid gap-3 sm:gap-4">
             <div className="rounded-2xl border hairline bg-white/60 p-5 shadow-card sm:p-7">
