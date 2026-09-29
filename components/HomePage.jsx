@@ -52,7 +52,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
               <a href="#faq" className="text-sm text-ink/70 transition-colors hover:text-ink">FAQ</a>
               <a href={`${basePath}/blog/`} className="text-sm text-ink/70 transition-colors hover:text-ink">Blog posts</a>
               <a href="https://www.linkedin.com/" className="text-sm text-ink/70 transition-colors hover:text-ink">View on LinkedIn</a>
-              <a href="mailto:?subject=ordinarychat%20waitlist" className="text-sm text-ink/70 transition-colors hover:text-ink">Join waitlist</a>
+              <a href="https://forms.gle/5S1woKUATYZ6evcH8" className="text-sm text-ink/70 transition-colors hover:text-ink">Join waitlist</a>
             </div>
             <span className="hidden rounded-full border hairline px-4 py-2 text-sm font-medium text-clay md:inline">Coming soon</span>
             <button type="button" className="inline-flex h-10 w-10 items-center justify-center rounded-full border hairline text-ink md:hidden" aria-label="Toggle navigation menu" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>
@@ -62,7 +62,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
               <a href="#faq" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">FAQ</a>
               <a href={`${basePath}/blog/`} onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Blog posts</a>
               <a href="https://www.linkedin.com/" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">View on LinkedIn</a>
-              <a href="mailto:?subject=ordinarychat%20waitlist" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Join waitlist</a>
+              <a href="https://forms.gle/5S1woKUATYZ6evcH8" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Join waitlist</a>
               <span className="mx-4 mt-1 border-t hairline pt-3 pb-2 text-sm font-semibold text-clay">Coming soon</span>
             </div>}
           </nav>
