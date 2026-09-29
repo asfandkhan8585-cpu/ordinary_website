@@ -175,8 +175,11 @@
     .faq-item { border-bottom:1px solid rgba(16,36,58,.14); }
     .faq-item summary { display:flex; align-items:center; justify-content:space-between; gap:2rem; cursor:pointer; list-style:none; padding:1.3rem 0; font:400 clamp(1.05rem,2vw,1.35rem) 'Fraunces',Georgia,serif; }
     .faq-item summary::-webkit-details-marker { display:none; }
-    .faq-item summary::after { content:'+'; color:#0A66C2; font:300 1.8rem Inter,sans-serif; }
-    .faq-item[open] summary::after { content:'−'; }
+    .faq-item summary::marker { content:''; }
+    .faq-item summary:focus-visible { outline:2px solid #0A66C2; outline-offset:4px; border-radius:.25rem; }
+    .faq-logo { position:relative; display:inline-flex; flex:none; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; transform:rotate(0deg); transition:transform .65s cubic-bezier(.22,1,.36,1); }
+    .faq-logo::after { content:''; position:absolute; top:.22rem; right:.28rem; width:.35rem; height:.35rem; border-radius:50%; background:#D84B47; }
+    .faq-item[open] .faq-logo { transform:rotate(360deg); }
     .faq-item p { max-width:45rem; padding:0 2rem 1.4rem 0; font-size:1rem; line-height:1.65; color:#53677b; }
     .lottie-box svg { width:100%; height:100%; }
     .marquee-track { display:flex; width:max-content; gap:0; animation:marquee 30s linear infinite; }
@@ -477,7 +480,7 @@
         ['Will OrdinaryChat send or post for me?','No. You decide whether to use a suggestion, and you manually send the email or publish the post.'],
         ['Is OrdinaryChat available now?','It is coming soon. This page previews the planned writing experience.']
       ];
-      return <section id="faq" className="py-14 sm:py-20"><div className="mx-auto max-w-4xl px-5 sm:px-8"><h2 className="font-display text-4xl font-light text-ink sm:text-6xl">Good <em className="text-olive">questions.</em></h2><div className="mt-6 border-t hairline">{items.map(([question,answer],i)=><details key={question} className="faq-item" open={i===0}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>;
+      return <section id="faq" className="py-14 sm:py-20"><div className="mx-auto max-w-4xl px-5 sm:px-8"><h2 className="font-display text-4xl font-light text-ink sm:text-6xl">Good <em className="text-olive">questions.</em></h2><div className="mt-6 border-t hairline">{items.map(([question,answer],i)=><details key={question} className="faq-item" open={i===0}><summary>{question}<span className="faq-logo" aria-hidden="true"><LogoMark /></span></summary><p>{answer}</p></details>)}</div></div></section>;
     }
 
     function Closing() {
