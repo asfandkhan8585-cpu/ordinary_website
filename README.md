@@ -16,3 +16,5 @@ Open `posts.json` and add one object to the array.
 The blog index and article metadata are generated from this file during the build. The GitHub Actions workflow exports and deploys the static site to GitHub Pages on each push to `main`.
 
 Netlify uses `netlify.toml` to build the same static export and publish the `out` directory.
+
+The build generates `sitemap.xml`, separate page and blog sitemaps, and `robots.txt`. An article sitemap is generated when `posts.json` contains posts. Sitemap URLs use `SITE_URL` when set, Netlify's `URL` variable on Netlify, and the GitHub Pages URL for GitHub Pages builds.
