@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ordinarychat - Write like yourself. Just clearer.</title>
+  <meta name="description" content="An all in one writing assistant that helps you turn rough ideas into clear, natural writing. Starting with Gmail and LinkedIn." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="tailwind-config.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#10243A',
+            paper: '#F8FBFF',
+            sand: '#E7F1FA',
+            olive: '#0A66C2',
+            'deep-olive': '#102B4A',
+            clay: '#D84B47',
+            mist: '#D9EBFB',
+          },
+          fontFamily: {
+            display: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          maxWidth: {
+            '8xl': '88rem',
+          },
+          boxShadow: {
+            card: '0 1px 2px rgba(32,32,30,0.04), 0 8px 30px rgba(32,32,30,0.06)',
+            float: '0 2px 4px rgba(32,32,30,0.05), 0 20px 50px rgba(32,32,30,0.10)',
+            chip: '0 1px 2px rgba(32,32,30,0.05)',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root { color-scheme: light; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #F8FBFF;
+      color: #10243A;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+
+    .paper-grain::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.09;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+      background-repeat: repeat;
+      mix-blend-mode: multiply;
+    }
+    .drift-texture {
+      background-image: radial-gradient(circle at 30% 40%, rgba(114,116,92,0.05), transparent 60%),
+                        radial-gradient(circle at 70% 60%, rgba(201,126,98,0.04), transparent 55%);
+      animation: drift 18s ease-in-out infinite;
+    }
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      50% { transform: translate3d(2%, -1.5%, 0); }
+    }
+    .caret {
+      display: inline-block;
+      width: 2px;
+      height: 1.05em;
+      background-color: #10243A;
+      vertical-align: text-bottom;
+      margin-left: 2px;
+      margin-bottom: 2px;
+      border-radius: 1px;
+      animation: caret-blink 1.05s steps(1) infinite;
+    }
+    @keyframes caret-blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    .pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    .hairline { border-color: rgba(32, 32, 30, 0.10); }
+    .hairline-light { border-color: rgba(246, 243, 237, 0.14); }
+    ::selection { background-color: #D84B47; color: #F8FBFF; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #F8FBFF; }
+    ::-webkit-scrollbar-thumb { background: #E7F1FA; border-radius: 8px; border: 2px solid #F8FBFF; }
+    ::-webkit-scrollbar-thumb:hover { background: #D9EBFB; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .caret { animation: none; opacity: 1; }
+      .drift-texture { animation: none !important; }
+      .pulse-soft { animation: none !important; }
+      .reveal { transition: none !important; opacity: 1 !important; transform: none !important; }
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    @media (hover: none) {
+      .hover-lift:hover {
+        transform: none !important;
+        box-shadow: 0 1px 2px rgba(32,32,30,0.04), 0 8px 30px rgba(32,32,30,0.06) !important;
+      }
+    }
+
+    .ribbon-scene { position:relative; height:390px; overflow:hidden; border-radius:2rem; background:radial-gradient(circle at 50% 50%,#fff,#e9f3fc 85%); box-shadow:0 22px 70px rgba(16,36,58,.07); }
+    .ribbon-scene::before { content:''; position:absolute; inset:0; opacity:.28; background-image:radial-gradient(#8ab5d9 1px,transparent 1px); background-size:24px 24px; mask-image:linear-gradient(90deg,transparent,#000 50%,transparent); }
+    .flow-svg { display:block; position:relative; width:100%; height:100%; }
+    .flow-rough { fill:#61798d; font:500 35px Inter,system-ui,sans-serif; }
+    .flow-clear { fill:#0A66C2; stroke:#f8fbff; stroke-width:1.5px; paint-order:stroke fill; font:italic 300 42px 'Fraunces',Georgia,serif; letter-spacing:-.02em; filter:drop-shadow(0 2px 5px rgba(10,102,194,.14)); }
+    .flow-logo { filter:drop-shadow(0 10px 20px rgba(16,36,58,.17)); }
+    .flow-logo-orbit { transform-box:fill-box; transform-origin:center; animation:logo-orbit 9s linear infinite; }
+    .flow-logo-core { animation:logo-glow 3s ease-in-out infinite alternate; }
+    @keyframes logo-orbit { to { transform:rotate(360deg); } }
+    @keyframes logo-glow { from { filter:drop-shadow(0 0 0 rgba(216,75,71,0)); } to { filter:drop-shadow(0 0 18px rgba(216,75,71,.55)); } }
+    .mobile-logo-orbit { position:relative; width:8rem; height:8rem; display:grid; place-items:center; border:4px solid #10243A; border-radius:50%; background:#fff; box-shadow:0 12px 30px rgba(16,36,58,.12); }
+    .mobile-logo-orbit::after { content:''; position:absolute; inset:-13px; border:2px dashed #90b3d3; border-radius:50%; animation:logo-orbit 9s linear infinite; }
+    .flow-mobile { display:none; }
+    .tone-scroll-section { position:relative; background:#f1f7fc; }
+    .tone-sticky { display:flex; align-items:center; }
+    .tone-progress { display:flex; flex-wrap:wrap; justify-content:center; gap:.55rem; }
+    .tone-progress button { padding:.55rem 1.1rem; border:1px solid transparent; border-radius:999px; color:#58738b; font-size:.95rem; transition:background .18s,color .18s,transform .18s; }
+    .tone-progress button:hover { background:#e3edf6; }
+    .tone-progress .active { color:#fff; background:#10243A; transform:scale(1.08); box-shadow:0 10px 24px rgba(16,36,58,.19); }
+    .tone-progress button.active:hover { background:#10243A; }
+    .tone-progress button:focus-visible,.example-switch button:focus-visible { outline:3px solid #0A66C2; outline-offset:3px; }
+    .example-switch { display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; }
+    .example-switch button { padding:.5rem .8rem; border:1px solid #bdcfde; border-radius:.65rem; color:#536c82; background:white; font-size:.85rem; }
+    .example-switch button.active { border-color:#0A66C2; color:#0A66C2; background:#e6f2ff; }
+    .tone-highlight { background:#deeeff; color:#0a66c2; border-radius:.2em; box-decoration-break:clone; -webkit-box-decoration-break:clone; padding:0 .08em; }
+    .tone-result { min-height:5rem; }
+    .demo-change { background:#e3f7e9; color:#13794e; border-radius:.28em; box-decoration-break:clone; -webkit-box-decoration-break:clone; padding:0 .1em; }
+    .demo-output { min-height:7rem; }
+    .workflow-editor { min-height:190px; position:relative; }
+    .shortcut-overlay { position:absolute; z-index:5; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; border-radius:1rem; color:#fff; background:rgba(16,36,58,.96); opacity:0; transform:scale(.9); pointer-events:none; transition:opacity .25s,transform .4s cubic-bezier(.22,1,.36,1); }
+    .shortcut-overlay.show { opacity:1; transform:scale(1); }
+    .shortcut-overlay strong { font:600 clamp(2.3rem,5vw,4rem) Inter,sans-serif; letter-spacing:-.06em; }
+    .shortcut-overlay small { font-size:.8rem; letter-spacing:.15em; text-transform:uppercase; color:#bdd9ee; }
+    .shortcut-overlay .red-dot { width:.65rem; height:.65rem; border-radius:50%; background:#D84B47; box-shadow:0 0 0 12px rgba(216,75,71,.18); }
+    .workflow-caret { display:inline-block; width:2px; height:1em; margin-left:2px; background:#D84B47; vertical-align:-.1em; animation:caret-blink 1s steps(1) infinite; }
+    .shortcut-key { display:inline-flex; gap:.25rem; align-items:center; border:1px solid #9db1c4; border-radius:.6rem; padding:.45rem .7rem; background:#fff; color:#10243A; font-size:.85rem; box-shadow:0 3px 0 #bed0df; transition:transform .2s,box-shadow .2s; }
+    .shortcut-key.active { transform:translateY(3px) scale(1.22); box-shadow:0 0 0 9px rgba(216,75,71,.19),0 0 28px rgba(216,75,71,.3); border-color:#D84B47; font-weight:700; }
+    .faq-item { border-bottom:1px solid rgba(16,36,58,.14); }
+    .faq-item summary { display:flex; align-items:center; justify-content:space-between; gap:2rem; cursor:pointer; list-style:none; padding:1.3rem 0; font:400 clamp(1.05rem,2vw,1.35rem) 'Fraunces',Georgia,serif; }
+    .faq-item summary::-webkit-details-marker { display:none; }
+    .faq-item summary::after { content:'+'; color:#0A66C2; font:300 1.8rem Inter,sans-serif; }
+    .faq-item[open] summary::after { content:'−'; }
+    .faq-item p { max-width:45rem; padding:0 2rem 1.4rem 0; font-size:1rem; line-height:1.65; color:#53677b; }
+    .lottie-box svg { width:100%; height:100%; }
+    .marquee-track { display:flex; width:max-content; gap:0; animation:marquee 30s linear infinite; }
+    .marquee-track span { flex:none; padding-right:.32em; font-family:'Fraunces',Georgia,serif; font-size:clamp(1.7rem,4vw,3rem); color:#94b9db; white-space:nowrap; }
+    .hero-watermark { position:absolute; z-index:0; left:31%; top:2rem; font:300 clamp(8rem,21vw,23rem)/1 'Fraunces',Georgia,serif; letter-spacing:-.08em; color:#10243A; opacity:.035; white-space:nowrap; transform:rotate(-7deg); pointer-events:none; }
+    .big-wordmark { display:flex; align-items:center; justify-content:center; gap:0; margin-top:3rem; color:#10243A; font:400 clamp(4rem,14vw,13rem)/.85 'Fraunces',Georgia,serif; letter-spacing:-.075em; white-space:nowrap; }
+    .big-wordmark svg { width:.9em; height:.9em; flex:none; margin-right:-.11em; }
+    @media(max-width:700px) { .hero-watermark { top:5rem; left:3%; font-size:32vw; opacity:.025; } .big-wordmark { font-size:clamp(2.3rem,11vw,5rem); margin-top:2rem; } }
+
+    @keyframes marquee { to { transform:translateX(-50%); } }
+    @media(max-width:700px) { .ribbon-scene { height:auto; min-height:410px; border-radius:1.4rem; } .flow-svg { display:none; } .flow-mobile { display:flex; min-height:410px; flex-direction:column; justify-content:center; align-items:center; gap:.7rem; padding:1rem; font-size:1rem; } .flow-mobile .rough { animation:mobile-wave 8s ease-in-out infinite; } .flow-mobile .clear { animation:mobile-straight 8s linear infinite; } }
+    @media(max-width:380px) { header nav>span { padding:.45rem .7rem; font-size:.75rem; } .tone-progress { gap:.3rem; } .tone-progress button { padding:.5rem .8rem; } }
+    @keyframes mobile-wave { 0%,100% {transform:translateY(-6px) rotate(-2deg)} 50% {transform:translateY(6px) rotate(2deg)} }
+    @keyframes mobile-straight { 0%,100% {transform:translateX(-5px)} 50% {transform:translateX(5px)} }
+    @media(prefers-reduced-motion:reduce) { .marquee-track,.workflow-caret,.flow-mobile .rough,.flow-mobile .clear,.flow-logo-orbit,.flow-logo-core,.mobile-logo-orbit::after { animation:none!important; opacity:1; transform:none; } }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <script src="animation-assets.js"></script>
+
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useRef } = React;
+
+    const LogoMark = () => (
+      <svg viewBox="0 0 28 28" className="h-7 w-7" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="10.5" stroke="#10243A" strokeWidth="1.3" />
+        <circle cx="14" cy="14" r="3.4" fill="#D84B47" />
+        <circle cx="14" cy="14" r="10.5" stroke="#10243A" strokeWidth="0.6" strokeDasharray="1.5 3" opacity="0.4" />
+      </svg>
+    );
+
+    function useReveal() {
+      const ref = useRef(null);
+      useEffect(() => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: '-60px' }
+        );
+        if (ref.current) observer.observe(ref.current);
+        return () => observer.disconnect();
+      }, []);
+      return ref;
+    }
+
+    function Nav() {
+      const [scrolled, setScrolled] = useState(false);
+      useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 16);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener('scroll', onScroll);
+      }, []);
+
+      return (
+        <header className={`sticky top-0 z-50 transition-colors duration-500 ${scrolled ? 'bg-paper/85 backdrop-blur-md border-b hairline' : 'bg-transparent border-b border-transparent'}`}>
+          <nav className="mx-auto flex h-16 max-w-8xl items-center justify-between gap-3 px-5 sm:h-18 sm:px-8 lg:px-12">
+            <a href="#top" className="flex items-center gap-0 -ml-1" aria-label="ordinarychat home">
+              <LogoMark />
+              <span className="font-display text-xl lowercase tracking-tight text-ink">rdinarychat</span>
+            </a>
+            <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap text-sm md:gap-6">
+              <a href="#faq" className="text-sm text-ink/70 transition-colors hover:text-ink">FAQ</a>
+              <a href="blog.html" className="text-sm text-ink/70 transition-colors hover:text-ink">Blog posts</a>
+              <a href="" className="text-sm text-ink/70 transition-colors hover:text-ink">View on LinkedIn</a>
+              <a href="mailto:?subject=ordinarychat%20waitlist" className="text-sm text-ink/70 transition-colors hover:text-ink">Join waitlist</a>
+            </div>
+            <span className="rounded-full border hairline px-4 py-2 text-sm font-medium text-ink/65">Coming soon</span>
+          </nav>
+        </header>
+      );
+    }
+
+    function LottieArt({ file, className = '' }) {
+      const box = useRef(null);
+      useEffect(() => {
+        if (!box.current || !window.lottie) return;
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const animation = window.lottie.loadAnimation({ container: box.current, renderer: 'svg', loop: !reduced, autoplay: !reduced, path: animationAssets[file] });
+        if (reduced) animation.addEventListener('DOMLoaded', () => animation.goToAndStop(Math.round(animation.totalFrames / 2), true));
+        return () => animation.destroy();
+      }, [file]);
+      return <div ref={box} className={`lottie-box ${className}`} aria-hidden="true" />;
+    }
+
+    function FlowScene() {
+      const rough='i keep thinkin abt how to say what i mean but my words come out messy and i dont know how to make them sound rite so ';
+      const clear='OrdinaryChat turns rough thoughts into clear emails posts and everyday messages while keeping your own voice and ';
+      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const roughMeasure=useRef(null);
+      const clearMeasure=useRef(null);
+      const incomingPaths=useRef([]);
+      const outgoingPaths=useRef([]);
+      const [lengths,setLengths]=useState({rough:0,clear:0});
+      useEffect(()=>{
+        let active=true;
+        const measure=()=>{if(active&&roughMeasure.current&&clearMeasure.current)setLengths({rough:roughMeasure.current.getComputedTextLength(),clear:clearMeasure.current.getComputedTextLength()})};
+        measure();
+        document.fonts?.ready.then(measure);
+        return()=>{active=false};
+      },[]);
+      useEffect(()=>{
+        if(reduced||!lengths.rough||!lengths.clear)return;
+        let frameId;
+        let previousTime=0;
+        let roughOffset=180;
+        let clearOffset=320;
+        const move=(time)=>{
+          if(previousTime){
+            const distance=Math.min(time-previousTime,80)*.085;
+            roughOffset=(roughOffset+distance)%lengths.rough;
+            clearOffset=(clearOffset+distance)%lengths.clear;
+          }
+          previousTime=time;
+          incomingPaths.current.forEach((path,index)=>path?.setAttribute('startOffset',String(index*lengths.rough-roughOffset)));
+          outgoingPaths.current.forEach((path,index)=>path?.setAttribute('startOffset',String(770+index*lengths.clear-clearOffset)));
+          frameId=requestAnimationFrame(move);
+        };
+        frameId=requestAnimationFrame(move);
+        return()=>cancelAnimationFrame(frameId);
+      },[lengths.rough,lengths.clear,reduced]);
+      return <div className="ribbon-scene" role="img" aria-label="A continuous stream of imperfect writing curves into the OrdinaryChat O. Clear writing about emails, posts, and messages emerges in a straight line.">
+        <svg className="flow-svg" viewBox="0 0 1440 390" aria-hidden="true">
+          <defs><path id="incoming-curve" d="M 840 195 C 930 92 1005 102 1070 195 C 1135 285 1220 280 1280 195 S 1490 110 1700 195" /><path id="outgoing-line" d="M -160 195 L 610 195" /></defs>
+          <path d="M 840 195 C 930 92 1005 102 1070 195 C 1135 285 1220 280 1280 195 S 1490 110 1700 195" fill="none" stroke="#c8d8e6" strokeWidth="2" opacity=".8" />
+          <path d="M -160 195 L 610 195" fill="none" stroke="#c8d8e6" strokeWidth="2" opacity=".8" />
+          <text ref={roughMeasure} className="flow-rough" visibility="hidden">{rough}</text>
+          <text ref={clearMeasure} className="flow-clear" visibility="hidden">{clear}</text>
+          {[0,1].filter(index=>index===0||(!reduced&&lengths.rough>0)).map(index=><text className="flow-rough" key={index}><textPath ref={node=>{incomingPaths.current[index]=node}} href="#incoming-curve" startOffset={reduced?'0':String(index*lengths.rough-180)}>{rough}</textPath></text>)}
+          {[0,1].filter(index=>index===0||(!reduced&&lengths.clear>0)).map(index=><text className="flow-clear" key={index}><textPath ref={node=>{outgoingPaths.current[index]=node}} href="#outgoing-line" startOffset={reduced?'0':String(770+index*lengths.clear-320)}>{clear}</textPath></text>)}
+          <g className="flow-logo" transform="translate(720 195)"><g className="flow-logo-orbit"><circle r="126" fill="none" stroke="#80aed4" strokeWidth="2" strokeDasharray="6 12" /><circle cx="0" cy="-126" r="6" fill="#D84B47" /></g><circle r="110" fill="#fff" stroke="#10243A" strokeWidth="7" /><circle className="flow-logo-core" r="34" fill="#D84B47" /></g>
+          <text x="50" y="355" fill="#657b90" fontSize="14" letterSpacing="2">CLEAR WRITING OUT</text><text x="1195" y="355" fill="#657b90" fontSize="14" letterSpacing="2">ROUGH THOUGHT IN</text>
+        </svg>
+        <div className="flow-mobile" aria-hidden="true"><p className="rough max-w-xs text-center text-ink/55">{rough}</p><div className="mobile-logo-orbit"><span className="h-9 w-9 rounded-full bg-clay" /></div><p className="clear max-w-xs rounded-xl bg-white px-3 py-2 text-center font-display text-lg font-light italic text-olive">{clear}</p></div>
+      </div>;
+    }
+
+    function Hero() {
+      return (
+        <section id="top" className="relative overflow-hidden">
+          <div className="drift-texture pointer-events-none absolute inset-0" aria-hidden="true" /><div className="hero-watermark" aria-hidden="true">ordinarychat</div>
+          <div className="relative mx-auto max-w-8xl px-5 pb-0 pt-10 sm:px-8 sm:pb-0 sm:pt-14 lg:px-12 lg:pt-16">
+            <div className="max-w-3xl text-left">
+              <h1 className="mt-2 font-display text-[2.7rem] font-light leading-[1.04] tracking-tight text-ink sm:mt-4 sm:text-6xl lg:text-[5.5rem]">Every thought,<br /><em className="text-olive">beautifully expressed.</em></h1>
+              <p className="mt-7 max-w-lg text-base leading-relaxed text-ink/70 sm:text-lg">Turn rough ideas into clear posts, emails, and everyday messages while keeping your own voice.</p>
+            </div>
+            <div className="mt-8 sm:mt-10"><FlowScene /></div>
+          </div>
+        </section>
+      );
+    }
+
+    function RewriteShowcase() {
+      const tones=['Natural','Confident','Professional','Friendly'];
+      const draft='hey, i wanted to follow up on the proposal and see what you think';
+      const versions=[
+        [['Hi, ',true],['I wanted to follow up on the proposal ',false],['and hear what you think.',true]],
+        [['I’m following up on the proposal ',true],['and would value your perspective on the direction.',true]],
+        [['I’m writing to follow up on the proposal ',true],['and would appreciate your feedback.',true]],
+        [['Hey, just checking in on the proposal. ',true],['I’d love to hear what you think when you have a chance.',true]]
+      ];
+      const [tone,setTone]=useState(0);
+      const [shown,setShown]=useState({input:0,output:0});
+      const fullOutput=versions[tone].map(([words])=>words).join('');
+      useEffect(()=>{
+        if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){setShown({input:draft.length,output:versions[tone].map(([words])=>words).join('').length});return;}
+        setShown({input:0,output:0});
+        const outputLength=versions[tone].map(([words])=>words).join('').length;
+        let input=0,output=0;
+        const timer=setInterval(()=>{
+          if(input<draft.length)input=Math.min(draft.length,input+3);
+          else output=Math.min(outputLength,output+5);
+          setShown({input,output});
+          if(output===outputLength)clearInterval(timer);
+        },16);
+        return()=>clearInterval(timer);
+      },[tone]);
+      let consumed=0;
+      const streamed=versions[tone].map(([words,changed],i)=>{
+        const visible=words.slice(0,Math.max(0,shown.output-consumed));
+        consumed+=words.length;
+        return <span key={i} className={changed&&visible?'tone-highlight':''}>{visible}</span>;
+      });
+      return <section className="tone-scroll-section pt-4 pb-16 sm:pt-4 sm:pb-24" aria-label="See one draft rewritten in four tones">
+        <div className="tone-sticky"><div className="mx-auto w-full max-w-5xl px-5 sm:px-8">
+          <div className="text-center">
+            <span className="text-sm font-semibold uppercase tracking-[.2em] text-olive">Try a tone</span>
+            <h2 className="mt-3 font-display text-3xl font-light text-ink sm:text-5xl">One thought, four ways to say it.</h2>
+            <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-ink/60 sm:text-lg">Choose a tone to see how the same thought changes.</p>
+          </div>
+          <div className="mt-7">
+            <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[.18em] text-ink/45">Pick a tone</p>
+            <div className="tone-progress" role="group" aria-label="Choose a tone">{tones.map((name,i)=><button type="button" key={name} className={tone===i?'active':''} aria-pressed={tone===i} onClick={()=>setTone(i)}>{name}</button>)}</div>
+          </div>
+          <div className="mt-7 grid gap-3 sm:gap-4">
+            <div className="rounded-2xl border hairline bg-white/60 p-5 shadow-card sm:p-7">
+              <div className="flex items-center gap-2"><span className="text-xs font-semibold uppercase tracking-[.18em] text-ink/45">Your draft</span><span className="text-ink/20">—</span><span className="text-xs text-ink/45">what you wrote</span></div>
+              <p className="mt-3 min-h-[3rem] font-display text-xl leading-relaxed text-ink/70 sm:text-2xl">{draft.slice(0,shown.input)}{shown.input<draft.length&&<span className="workflow-caret" />}</p>
+            </div>
+            <div className="flex items-center justify-center gap-3 py-1" aria-hidden="true"><span className="h-px w-12 bg-clay/30 sm:w-20" /><svg className="h-5 w-5 text-clay" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><polyline points="6,13 12,19 18,13" /></svg><span className="text-xs font-medium uppercase tracking-wider text-clay/80">Rewritten</span><span className="h-px w-12 bg-clay/30 sm:w-20" /></div>
+            <div className="rounded-2xl border-2 border-clay/20 bg-white p-5 shadow-float sm:p-7">
+              <div className="flex items-center"><span className="text-xs font-semibold uppercase tracking-[.18em] text-clay">OrdinaryChat</span></div>
+              <p className="tone-result mt-3 font-display text-xl leading-relaxed text-ink sm:text-2xl" aria-live="polite">{streamed}{shown.input===draft.length&&shown.output<fullOutput.length&&<span className="workflow-caret" />}</p>
+              <p className="mt-4 text-sm text-ink/50">Same meaning. Different feel. You decide what fits.</p>
+            </div>
+          </div>
+        </div></div>
+      </section>;
+    }
+
+    function WorkflowDemo() {
+      const ref=useReveal();
+      const examples=[
+        {draft:'great job on this',parts:[['Great work',true],[' on this. ',false],['I especially liked the clear way you explained the idea.',true]]},
+        {draft:'can we talk tomorrow',parts:[['Hi, would you be available for a quick chat',true],[' tomorrow?',false]]},
+        {draft:'excited to share our new app',parts:[['Excited',true],[' to share our new app. ',false],['It’s built to make everyday work simpler and faster.',true]]}
+      ];
+      const origin=useRef(0);
+      const [elapsed,setElapsed]=useState(0);
+      useEffect(()=>{
+        const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if(reduced){setElapsed(2500);return;}
+        origin.current=performance.now();
+        const timer=setInterval(()=>setElapsed(performance.now()-origin.current),24);
+        const onKey=(event)=>{
+          const box=ref.current?.getBoundingClientRect();
+          if(box&&box.top<window.innerHeight&&box.bottom>0&&event.ctrlKey&&event.key.toLowerCase()==='o'){
+            event.preventDefault();origin.current=performance.now()-(Math.floor((performance.now()-origin.current)/6000)*6000+1050);
+            setElapsed(performance.now()-origin.current);
+          }
+        };
+        window.addEventListener('keydown',onKey);
+        return()=>{clearInterval(timer);window.removeEventListener('keydown',onKey)};
+      },[]);
+      const index=Math.floor(elapsed/6000)%examples.length;
+      const local=elapsed%6000;
+      const example=examples[index];
+      const draftCount=local<1000?Math.min(example.draft.length,Math.floor(local/28)):example.draft.length;
+      const outputCount=local<1450?0:Math.floor((local-1450)/13);
+      let consumed=0;
+      const streamed=example.parts.map(([part,changed],i)=>{
+        const portion=part.slice(0,Math.max(0,outputCount-consumed));
+        consumed+=part.length;
+        return <span key={i} className={changed&&portion?'demo-change':''}>{portion}</span>;
+      });
+      const finished=outputCount>=example.parts.map(([part])=>part.length).reduce((a,b)=>a+b,0);
+      const press=()=>{origin.current=performance.now()-(index*6000+1050);setElapsed(performance.now()-origin.current)};
+      return <section id="how-it-works" ref={ref} className="reveal bg-deep-olive py-14 sm:py-20"><div className="mx-auto grid max-w-8xl items-center gap-8 px-5 sm:px-8 lg:grid-cols-[.75fr_1.25fr] lg:gap-16 lg:px-12"><div><span className="text-sm font-semibold uppercase tracking-[.2em] text-mist/65">See it happen</span><h2 className="mt-4 font-display text-3xl font-light text-paper sm:text-5xl">One shortcut. A clearer draft.</h2><p className="mt-5 text-base leading-relaxed text-mist/75">Type naturally. Press Ctrl + O, review the rewrite, and send it yourself.</p></div><div className="rounded-[1.5rem] bg-white p-4 shadow-float sm:p-6"><div className="flex justify-between border-b hairline pb-3"><span className="font-display text-lg">New message</span><span className="text-sm text-ink/40">Example {index+1} of 3</span></div><div className="workflow-editor py-5"><div className={`shortcut-overlay ${local>=1000&&local<1450?'show':''}`} aria-hidden="true"><span className="red-dot" /><strong>Ctrl + O</strong><small>Making it clearer</small></div><span className="text-xs font-semibold uppercase tracking-widest text-ink/45">You type</span><p className="mt-2 min-h-[2.5rem] font-display text-lg leading-relaxed text-ink sm:text-xl">{example.draft.slice(0,draftCount)}{local<1000&&<span className="workflow-caret" />}</p><div className="mt-5 border-t hairline pt-4"><span className="text-xs font-semibold uppercase tracking-widest text-clay">OrdinaryChat</span><p className="demo-output mt-2 font-display text-lg leading-relaxed text-ink sm:text-xl">{streamed}{local>=1450&&!finished&&<span className="workflow-caret" />}</p></div></div><div className="flex items-center justify-between border-t hairline pt-4"><span className="text-xs text-ink/50">{local<1000?'Typing…':local<1450?'Ctrl + O pressed':finished?'Clearer draft ready':'Writing your draft…'}</span><button className={`shortcut-key ${local>=1000&&local<1450?'active':''}`} onClick={press} aria-label="Preview Ctrl O rewrite"><kbd>Ctrl</kbd> + <kbd>O</kbd></button></div></div></div></section>;
+    }
+
+    function Platforms() {
+      const ref = useReveal();
+      return (
+        <section id="platforms" ref={ref} className="reveal relative overflow-hidden bg-sand/40 py-14 sm:py-20">
+          <div className="mx-auto max-w-8xl px-5 sm:px-8 lg:px-12">
+            <div className="mx-auto max-w-3xl text-center">
+              <span className="text-sm font-semibold uppercase tracking-[.2em] text-olive">Where it begins</span>
+              <h2 className="mt-4 font-display text-3xl font-light leading-tight sm:text-5xl">One assistant for the way you write.</h2>
+              <p className="mt-5 text-base leading-relaxed text-ink/65 sm:text-lg">OrdinaryChat is designed for writing across the web. The first experience starts in Gmail and LinkedIn.</p>
+            </div>
+            <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-2 sm:gap-7">
+              <div className="rounded-3xl border hairline bg-white p-7 shadow-card sm:p-9">
+                <LottieArt file="gmail" className="h-32 w-32" />
+                <h3 className="mt-3 font-display text-2xl">Gmail</h3>
+                <p className="mt-2 text-base leading-relaxed text-ink/65">Turn rough emails into messages that are easy to read and ready for you to send.</p>
+              </div>
+              <div className="rounded-3xl border hairline bg-white p-7 shadow-card sm:p-9">
+                <LottieArt file="linkedin" className="h-32 w-32" />
+                <h3 className="mt-3 font-display text-2xl">LinkedIn</h3>
+                <p className="mt-2 text-base leading-relaxed text-ink/65">Shape clearer posts, comments, and replies without sounding like someone else.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    function Faq() {
+      const items=[
+        ['Where will OrdinaryChat work first?','The first release is planned for Gmail and LinkedIn. The longer term idea is one writing assistant for more places you write online.'],
+        ['What does Ctrl + O do?','In the planned extension, Ctrl + O refines a draft in the text field. You can review the new wording before you send or post anything.'],
+        ['Will OrdinaryChat send or post for me?','No. You decide whether to use a suggestion, and you manually send the email or publish the post.'],
+        ['Is OrdinaryChat available now?','It is coming soon. This page previews the planned writing experience.']
+      ];
+      return <section id="faq" className="py-14 sm:py-20"><div className="mx-auto max-w-4xl px-5 sm:px-8"><h2 className="font-display text-4xl font-light text-ink sm:text-6xl">Good <em className="text-olive">questions.</em></h2><div className="mt-6 border-t hairline">{items.map(([question,answer],i)=><details key={question} className="faq-item" open={i===0}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>;
+    }
+
+    function Closing() {
+      const ref=useReveal();
+      return <section ref={ref} className="reveal relative overflow-hidden py-12 sm:py-16"><div className="marquee-track" aria-hidden="true"><span>{'Thoughts in. Clarity out. '.repeat(6)}</span><span>{'Thoughts in. Clarity out. '.repeat(6)}</span></div><div className="relative mx-auto mt-8 max-w-3xl px-5 text-center"><LottieArt file="wave" className="mx-auto h-28 w-40 overflow-hidden sm:h-36 sm:w-52" /><h2 className="mt-4 font-display text-3xl font-light sm:text-5xl">Write like yourself. Just clearer.</h2></div></section>;
+    }
+
+    function Footer() {
+      return (
+        <footer className="relative border-t hairline bg-paper/60 py-12 sm:py-16">
+          <div className="mx-auto max-w-8xl px-5 sm:px-8 lg:px-12">
+            <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center">
+              <div className="flex items-center gap-0 -ml-1">
+                <LogoMark />
+                <span className="font-display text-lg lowercase tracking-tight text-ink">rdinarychat</span>
+              </div>
+              <p className="max-w-md text-sm text-ink/55">An all in one writing assistant. Starting with Gmail and LinkedIn.</p>
+            </div>
+            <div className="big-wordmark" aria-label="Ordinarychat"><svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle cx="14" cy="14" r="10.5" stroke="#10243A" strokeWidth="1.8" /><circle cx="14" cy="14" r="3.4" fill="#D84B47" /></svg><span>rdinarychat</span></div>
+            <div className="mt-8 border-t hairline pt-6">
+              <p className="text-xs text-ink/45">&copy; 2026 ordinarychat</p>
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="paper-grain relative min-h-screen bg-paper text-ink">
+          <Nav />
+          <main className="relative z-10">
+            <Hero />
+            <RewriteShowcase />
+            <WorkflowDemo />
+            <Platforms />
+            <Faq />
+            <Closing />
+          </main>
+          <Footer />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
