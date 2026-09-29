@@ -3,7 +3,8 @@ import Script from 'next/script';
 
 export const metadata = {
   title: 'ordinarychat - Write like yourself. Just clearer.',
-  description: 'An all in one writing assistant that helps you turn rough ideas into clear, natural writing. Starting with Gmail and LinkedIn.'
+  description: 'An all in one writing assistant that helps you turn rough ideas into clear, natural writing. Starting with Gmail and LinkedIn.',
+  verification: { google: '6UuQjDQuTTukgVWjAOD-22wSazz96J5huK1ozOMrzm0' }
 };
 
 export default function RootLayout({ children }) {
