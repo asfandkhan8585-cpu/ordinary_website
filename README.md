@@ -14,3 +14,5 @@ Open `posts.json` and add one object to the array.
 - Add each article paragraph as a separate item in `content`.
 
 The blog index and article metadata are generated from this file during the build. The GitHub Actions workflow exports and deploys the static site to GitHub Pages on each push to `main`.
+
+Netlify uses `netlify.toml` to build the same static export and publish the `out` directory.
