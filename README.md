@@ -1,6 +1,8 @@
 # ordinarychat website
 
-The site is static and can be deployed by GitHub Pages after every push to `main`.
+This is a Next.js project. Run `npm install`, then `npm run dev` for local development. Use `npm run build` to check a production build and `npm start` to serve it.
+
+The homepage is in `components/HomePage.jsx`, and blog routes are in `app/blog`. Shared styles are in `app/globals.css`.
 
 ## Add a blog post
 
@@ -11,4 +13,4 @@ Open `posts.json` and add one object to the array.
 - Set `featured` to `true` for one post to feature it at the top of the blog page.
 - Add each article paragraph as a separate item in `content`.
 
-Commit and push the updated `posts.json`. The blog index, article page, page title, description, and JSON-LD schema update automatically.
+The blog index and article metadata are generated from this file during the build. Deploy the Next.js build when publishing changes.

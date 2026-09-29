@@ -1,213 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>ordinarychat - Write like yourself. Just clearer.</title>
-  <meta name="description" content="An all in one writing assistant that helps you turn rough ideas into clear, natural writing. Starting with Gmail and LinkedIn." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="tailwind-config.js"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            ink: '#10243A',
-            paper: '#F8FBFF',
-            sand: '#E7F1FA',
-            olive: '#0A66C2',
-            'deep-olive': '#102B4A',
-            clay: '#D84B47',
-            mist: '#D9EBFB',
-          },
-          fontFamily: {
-            display: ['Fraunces', 'Georgia', 'serif'],
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-          maxWidth: {
-            '8xl': '88rem',
-          },
-          boxShadow: {
-            card: '0 1px 2px rgba(32,32,30,0.04), 0 8px 30px rgba(32,32,30,0.06)',
-            float: '0 2px 4px rgba(32,32,30,0.05), 0 20px 50px rgba(32,32,30,0.10)',
-            chip: '0 1px 2px rgba(32,32,30,0.05)',
-          },
-        },
-      },
-    };
-  </script>
-  <style>
-    :root { color-scheme: light; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      font-family: 'Inter', system-ui, sans-serif;
-      background-color: #F8FBFF;
-      color: #10243A;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-    }
-    .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+'use client';
 
-    .paper-grain::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 100;
-      opacity: 0.09;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-      background-repeat: repeat;
-      mix-blend-mode: multiply;
-    }
-    .drift-texture {
-      background-image: radial-gradient(circle at 30% 40%, rgba(114,116,92,0.05), transparent 60%),
-                        radial-gradient(circle at 70% 60%, rgba(201,126,98,0.04), transparent 55%);
-      animation: drift 18s ease-in-out infinite;
-    }
-    @keyframes drift {
-      0%, 100% { transform: translate3d(0, 0, 0); }
-      50% { transform: translate3d(2%, -1.5%, 0); }
-    }
-    .caret {
-      display: inline-block;
-      width: 2px;
-      height: 1.05em;
-      background-color: #10243A;
-      vertical-align: text-bottom;
-      margin-left: 2px;
-      margin-bottom: 2px;
-      border-radius: 1px;
-      animation: caret-blink 1.05s steps(1) infinite;
-    }
-    @keyframes caret-blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-    .pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
-    @keyframes pulse-soft {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-    .hairline { border-color: rgba(32, 32, 30, 0.10); }
-    .hairline-light { border-color: rgba(246, 243, 237, 0.14); }
-    ::selection { background-color: #D84B47; color: #F8FBFF; }
-    ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: #F8FBFF; }
-    ::-webkit-scrollbar-thumb { background: #E7F1FA; border-radius: 8px; border: 2px solid #F8FBFF; }
-    ::-webkit-scrollbar-thumb:hover { background: #D9EBFB; }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .caret { animation: none; opacity: 1; }
-      .drift-texture { animation: none !important; }
-      .pulse-soft { animation: none !important; }
-      .reveal { transition: none !important; opacity: 1 !important; transform: none !important; }
-      *, *::before, *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
-    @media (hover: none) {
-      .hover-lift:hover {
-        transform: none !important;
-        box-shadow: 0 1px 2px rgba(32,32,30,0.04), 0 8px 30px rgba(32,32,30,0.06) !important;
-      }
-    }
-
-    .flow-bleed { width:100vw; margin-left:calc(50% - 50vw); }
-    .ribbon-scene { position:relative; height:390px; overflow:hidden; background:radial-gradient(circle at 50% 50%,#fff,#e9f3fc 85%); box-shadow:0 22px 70px rgba(16,36,58,.07); }
-    .ribbon-scene::before { content:''; position:absolute; inset:0; opacity:.28; background-image:radial-gradient(#8ab5d9 1px,transparent 1px); background-size:24px 24px; mask-image:linear-gradient(90deg,transparent,#000 50%,transparent); }
-    .flow-svg { display:block; position:relative; width:100%; height:100%; }
-    .flow-rough { fill:#61798d; font:500 35px Inter,system-ui,sans-serif; }
-    .flow-clear { fill:#0A66C2; stroke:#f8fbff; stroke-width:1.5px; paint-order:stroke fill; font:italic 300 42px 'Fraunces',Georgia,serif; letter-spacing:-.02em; filter:drop-shadow(0 2px 5px rgba(10,102,194,.14)); }
-    .flow-logo { filter:drop-shadow(0 10px 20px rgba(16,36,58,.17)); }
-    .flow-logo-orbit { transform-box:fill-box; transform-origin:center; animation:logo-orbit 9s linear infinite; }
-    .flow-logo-core { animation:logo-glow 3s ease-in-out infinite alternate; }
-    @keyframes logo-orbit { to { transform:rotate(360deg); } }
-    @keyframes logo-glow { from { filter:drop-shadow(0 0 0 rgba(216,75,71,0)); } to { filter:drop-shadow(0 0 18px rgba(216,75,71,.55)); } }
-    .mobile-logo-orbit { position:relative; width:8rem; height:8rem; display:grid; place-items:center; border:4px solid #10243A; border-radius:50%; background:#fff; box-shadow:0 12px 30px rgba(16,36,58,.12); }
-    .mobile-logo-orbit::after { content:''; position:absolute; inset:-13px; border:2px dashed #90b3d3; border-radius:50%; animation:logo-orbit 9s linear infinite; }
-    .flow-mobile { display:none; }
-    .tone-scroll-section { position:relative; background:#f1f7fc; }
-    .tone-sticky { display:flex; align-items:center; }
-    .tone-progress { display:flex; flex-wrap:wrap; justify-content:center; gap:.55rem; }
-    .tone-progress button { padding:.55rem 1.1rem; border:1px solid transparent; border-radius:999px; color:#58738b; font-size:.95rem; transition:background .18s,color .18s,transform .18s; }
-    .tone-progress button:hover { background:#e3edf6; }
-    .tone-progress .active { color:#fff; background:#10243A; transform:scale(1.08); box-shadow:0 10px 24px rgba(16,36,58,.19); }
-    .tone-progress button.active:hover { background:#10243A; }
-    .tone-progress button:focus-visible,.example-switch button:focus-visible { outline:3px solid #0A66C2; outline-offset:3px; }
-    .example-switch { display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; }
-    .example-switch button { padding:.5rem .8rem; border:1px solid #bdcfde; border-radius:.65rem; color:#536c82; background:white; font-size:.85rem; }
-    .example-switch button.active { border-color:#0A66C2; color:#0A66C2; background:#e6f2ff; }
-    .tone-highlight { background:#deeeff; color:#0a66c2; border-radius:.2em; box-decoration-break:clone; -webkit-box-decoration-break:clone; padding:0 .08em; }
-    .tone-result { min-height:5rem; animation:tone-stage-in .18s cubic-bezier(.22,1,.36,1) both; }
-    .tone-stage { animation:tone-stage-in .18s cubic-bezier(.22,1,.36,1) both; }
-    @keyframes tone-stage-in { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
-    .demo-change { background:#e3f7e9; color:#13794e; border-radius:.28em; box-decoration-break:clone; -webkit-box-decoration-break:clone; padding:0 .1em; }
-    .demo-output { min-height:7rem; }
-    .workflow-editor { min-height:190px; position:relative; }
-    .shortcut-overlay { position:absolute; z-index:5; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.75rem; border-radius:1rem; color:#fff; background:rgba(16,36,58,.96); opacity:0; transform:scale(.9); pointer-events:none; transition:opacity .08s,transform .1s cubic-bezier(.22,1,.36,1); }
-    .shortcut-overlay.show { opacity:1; transform:scale(1); }
-    .shortcut-overlay strong { font:600 clamp(2.3rem,5vw,4rem) Inter,sans-serif; letter-spacing:-.06em; }
-    .shortcut-overlay small { font-size:.8rem; letter-spacing:.15em; text-transform:uppercase; color:#bdd9ee; }
-    .shortcut-overlay .red-dot { width:.65rem; height:.65rem; border-radius:50%; background:#D84B47; box-shadow:0 0 0 12px rgba(216,75,71,.18); }
-    .workflow-caret { display:inline-block; width:2px; height:1em; margin-left:2px; background:#D84B47; vertical-align:-.1em; animation:caret-blink 1s steps(1) infinite; }
-    .shortcut-key { display:inline-flex; gap:.25rem; align-items:center; border:1px solid #9db1c4; border-radius:.6rem; padding:.45rem .7rem; background:#fff; color:#10243A; font-size:.85rem; box-shadow:0 3px 0 #bed0df; transition:transform .08s,box-shadow .08s; }
-    .shortcut-key.active { transform:translateY(3px) scale(1.22); box-shadow:0 0 0 9px rgba(216,75,71,.19),0 0 28px rgba(216,75,71,.3); border-color:#D84B47; font-weight:700; }
-    .faq-item { border-bottom:1px solid rgba(16,36,58,.14); }
-    .faq-item summary { display:flex; align-items:center; justify-content:space-between; gap:2rem; cursor:pointer; list-style:none; padding:1.3rem 0; font:400 clamp(1.05rem,2vw,1.35rem) 'Fraunces',Georgia,serif; }
-    .faq-item summary::-webkit-details-marker { display:none; }
-    .faq-item summary::marker { content:''; }
-    .faq-item summary:focus-visible { outline:2px solid #0A66C2; outline-offset:4px; border-radius:.25rem; }
-    .faq-logo { position:relative; display:inline-flex; flex:none; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; transform:rotate(0deg); transition:transform .65s cubic-bezier(.22,1,.36,1); }
-    .faq-logo::after { content:''; position:absolute; top:.22rem; right:.28rem; width:.35rem; height:.35rem; border-radius:50%; background:#D84B47; }
-    .faq-item[open] .faq-logo { transform:rotate(360deg); }
-    .faq-item p { max-width:45rem; padding:0 2rem 1.4rem 0; font-size:1rem; line-height:1.65; color:#53677b; }
-    .lottie-box svg { width:100%; height:100%; }
-    .marquee-track { display:flex; width:max-content; gap:0; animation:marquee 30s linear infinite; }
-    .marquee-track span { flex:none; padding-right:.32em; font-family:'Fraunces',Georgia,serif; font-size:clamp(1.7rem,4vw,3rem); color:#94b9db; white-space:nowrap; }
-    .hero-watermark { position:absolute; z-index:0; left:31%; top:2rem; font:300 clamp(8rem,21vw,23rem)/1 'Fraunces',Georgia,serif; letter-spacing:-.08em; color:#10243A; opacity:.035; white-space:nowrap; transform:rotate(-7deg); pointer-events:none; }
-    .big-wordmark { display:flex; align-items:center; justify-content:center; gap:0; margin-top:3rem; color:#10243A; font:400 clamp(4rem,14vw,13rem)/.85 'Fraunces',Georgia,serif; letter-spacing:-.075em; white-space:nowrap; }
-    .big-wordmark svg { width:.9em; height:.9em; flex:none; margin-right:-.11em; }
-    @media(max-width:700px) { .hero-watermark { top:5rem; left:3%; font-size:32vw; opacity:.025; } .big-wordmark { font-size:clamp(2.3rem,11vw,5rem); margin-top:2rem; } }
-
-    @keyframes marquee { to { transform:translateX(-50%); } }
-    @media(max-width:700px) { .ribbon-scene { height:320px; min-height:320px; } .flow-svg { position:absolute; visibility:hidden; } .flow-mobile { position:relative; display:block; height:100%; overflow:hidden; font-size:1rem; } .flow-mobile .rough-lane,.flow-mobile .clear-lane { position:absolute; width:50%; height:3rem; overflow:hidden; white-space:nowrap; } .flow-mobile .rough-lane { right:0; top:calc(50% - 2.5rem); color:rgba(16,36,58,.55); } .flow-mobile .clear-lane { left:0; top:calc(50% + .6rem); color:#0A66C2; font:italic 300 1.15rem 'Fraunces',Georgia,serif; } .flow-mobile .rough-track,.flow-mobile .clear-track { position:absolute; display:flex; width:max-content; white-space:nowrap; will-change:transform; } .flow-mobile .rough-track { left:0; animation:mobile-flow-in 13s linear infinite; } .flow-mobile .clear-track { right:0; animation:mobile-flow-out 13s linear infinite; } .flow-mobile .rough-track span,.flow-mobile .clear-track span { flex:none; } .flow-mobile .mobile-logo-orbit { position:absolute; z-index:1; top:50%; left:50%; transform:translate(-50%,-50%); } }
-    @media(max-width:380px) { header nav>span { padding:.45rem .7rem; font-size:.75rem; } .tone-progress { gap:.3rem; } .tone-progress button { padding:.5rem .8rem; } }
-    @keyframes mobile-flow-in { from { transform:translateX(0); } to { transform:translateX(-50%); } }
-    @keyframes mobile-flow-out { from { transform:translateX(50%); } to { transform:translateX(0); } }
-    @media(prefers-reduced-motion:reduce) { .marquee-track,.workflow-caret,.flow-mobile .rough-track,.flow-mobile .clear-track,.flow-logo-orbit,.flow-logo-core,.mobile-logo-orbit::after,.tone-stage { animation:none!important; opacity:1; } }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
-  <script src="animation-assets.js"></script>
-
-  <script type="text/babel" data-presets="react">
-    const { useState, useEffect, useRef } = React;
+    import { useState, useEffect, useRef } from 'react';
 
     const LogoMark = () => (
       <svg viewBox="0 0 28 28" className="h-7 w-7" fill="none" aria-hidden="true">
@@ -256,20 +49,20 @@
             </a>
             <div className="hidden items-center gap-6 whitespace-nowrap md:flex">
               <a href="#faq" className="text-sm text-ink/70 transition-colors hover:text-ink">FAQ</a>
-              <a href="blog.html" className="text-sm text-ink/70 transition-colors hover:text-ink">Blog posts</a>
-              <a href="" className="text-sm text-ink/70 transition-colors hover:text-ink">View on LinkedIn</a>
+              <a href="/blog" className="text-sm text-ink/70 transition-colors hover:text-ink">Blog posts</a>
+              <a href="https://www.linkedin.com/" className="text-sm text-ink/70 transition-colors hover:text-ink">View on LinkedIn</a>
               <a href="mailto:?subject=ordinarychat%20waitlist" className="text-sm text-ink/70 transition-colors hover:text-ink">Join waitlist</a>
             </div>
-            <span className="hidden rounded-full border hairline px-4 py-2 text-sm font-medium text-ink/65 md:inline">Coming soon</span>
+            <span className="hidden rounded-full border hairline px-4 py-2 text-sm font-medium text-clay md:inline">Coming soon</span>
             <button type="button" className="inline-flex h-10 w-10 items-center justify-center rounded-full border hairline text-ink md:hidden" aria-label="Toggle navigation menu" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"><path d={menuOpen?'M6 6l12 12M18 6L6 18':'M4 7h16M4 12h16M4 17h16'} /></svg>
             </button>
-            {menuOpen&&<div className="absolute right-5 top-[4.5rem] flex w-64 flex-col rounded-2xl border hairline bg-paper p-3 shadow-float md:hidden">
-              <a href="#faq" onClick={()=>setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">FAQ</a>
-              <a href="blog.html" onClick={()=>setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Blog posts</a>
-              <a href="" onClick={()=>setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">View on LinkedIn</a>
-              <a href="mailto:?subject=ordinarychat%20waitlist" onClick={()=>setMenuOpen(false)} className="rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Join waitlist</a>
-              <span className="mx-4 mt-2 border-t hairline pt-3 text-sm text-ink/55">Coming soon</span>
+            {menuOpen&&<div className="mobile-menu absolute inset-x-4 top-[4.5rem] flex flex-col rounded-2xl border hairline bg-paper p-2 shadow-float md:hidden">
+              <a href="#faq" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">FAQ</a>
+              <a href="/blog" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Blog posts</a>
+              <a href="https://www.linkedin.com/" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">View on LinkedIn</a>
+              <a href="mailto:?subject=ordinarychat%20waitlist" onClick={()=>setMenuOpen(false)} className="mobile-menu-link rounded-xl px-4 py-3 text-sm text-ink/75 hover:bg-sand/50">Join waitlist</a>
+              <span className="mx-4 mt-1 border-t hairline pt-3 pb-2 text-sm font-semibold text-clay">Coming soon</span>
             </div>}
           </nav>
         </header>
@@ -279,11 +72,18 @@
     function LottieArt({ file, className = '' }) {
       const box = useRef(null);
       useEffect(() => {
-        if (!box.current || !window.lottie) return;
-        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const animation = window.lottie.loadAnimation({ container: box.current, renderer: 'svg', loop: !reduced, autoplay: !reduced, path: animationAssets[file] });
+        if (!box.current) return;
+        let animation;
+        let active = true;
+        const load = () => {
+          if (!active || !box.current) return;
+          if (!window.lottie) { window.setTimeout(load, 100); return; }
+        const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        animation = window.lottie.loadAnimation({ container: box.current, renderer: 'svg', loop: !reduced, autoplay: !reduced, path: '/' + file + '.json' });
         if (reduced) animation.addEventListener('DOMLoaded', () => animation.goToAndStop(Math.round(animation.totalFrames / 2), true));
-        return () => animation.destroy();
+        };
+        load();
+        return () => { active = false; animation?.destroy(); };
       }, [file]);
       return <div ref={box} className={`lottie-box ${className}`} aria-hidden="true" />;
     }
@@ -291,7 +91,7 @@
     function FlowScene() {
       const rough='i keep thinkin abt how to say what i mean but my words come out messy and i dont know how to make them sound rite so ';
       const clear='OrdinaryChat turns rough thoughts into clear emails posts and everyday messages while keeping your own voice and ';
-      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reduced=typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const roughMeasure=useRef(null);
       const clearMeasure=useRef(null);
       const incomingPaths=useRef([]);
@@ -332,7 +132,7 @@
           <g className="flow-logo" transform="translate(720 195)"><g className="flow-logo-orbit"><circle r="126" fill="none" stroke="#80aed4" strokeWidth="2" strokeDasharray="6 12" /><circle cx="0" cy="-126" r="6" fill="#D84B47" /></g><circle r="110" fill="#fff" stroke="#10243A" strokeWidth="7" /><circle className="flow-logo-core" r="34" fill="#D84B47" /></g>
           <text x="50" y="355" fill="#657b90" fontSize="14" letterSpacing="2">CLEAR WRITING OUT</text><text x="1195" y="355" fill="#657b90" fontSize="14" letterSpacing="2">ROUGH THOUGHT IN</text>
         </svg>
-        <div className="flow-mobile" aria-hidden="true"><div className="rough-lane"><div className="rough-track"><span>{rough}{'\u00a0'}</span><span>{rough}{'\u00a0'}</span></div></div><div className="mobile-logo-orbit"><span className="h-9 w-9 rounded-full bg-clay" /></div><div className="clear-lane"><div className="clear-track"><span>{clear}{'\u00a0'}</span><span>{clear}{'\u00a0'}</span></div></div></div>
+        <div className="flow-mobile" aria-hidden="true"><div className="mobile-logo-orbit"><span className="h-9 w-9 rounded-full bg-clay" /></div></div>
       </div>;
     }
 
@@ -360,7 +160,7 @@
         [['I’m writing to follow up on the proposal ',true],['and would appreciate your feedback.',true]],
         [['Hey, just checking in on the proposal. ',true],['I’d love to hear what you think when you have a chance.',true]]
       ];
-      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const reduced=typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const [elapsed,setElapsed]=useState(0);
       useEffect(()=>{
         if(reduced)return;
@@ -383,7 +183,7 @@
           <div className="text-center">
             <span className="text-sm font-semibold uppercase tracking-[.2em] text-olive">{tones[tone]}</span>
             <h2 className="mt-3 font-display text-3xl font-light text-ink sm:text-5xl">One thought, four ways to say it.</h2>
-            <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-ink/60 sm:text-lg">Watch each tone shape the same thought in its own way.</p>
+            <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-ink/60 sm:text-lg">Choose a tone: <span className="font-semibold text-olive">{tones[tone]}</span></p>
           </div>
           <div className="tone-stage mt-7 grid gap-3 sm:gap-4">
             <div className="rounded-2xl border hairline bg-white/60 p-5 shadow-card sm:p-7">
@@ -415,7 +215,7 @@
       const origin=useRef(0);
       const [elapsed,setElapsed]=useState(0);
       useEffect(()=>{
-        const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const reduced=typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if(reduced){setElapsed(writingEnd);return;}
         origin.current=performance.now();
         const timer=setInterval(()=>setElapsed(performance.now()-origin.current),24);
@@ -454,7 +254,7 @@
             <div className="mx-auto max-w-3xl text-center">
               <span className="text-sm font-semibold uppercase tracking-[.2em] text-olive">Where it begins</span>
               <h2 className="mt-4 font-display text-3xl font-light leading-tight sm:text-5xl">One assistant for the way you write.</h2>
-              <p className="mt-5 text-base leading-relaxed text-ink/65 sm:text-lg">OrdinaryChat is designed for writing across the web. The first experience starts in Gmail and LinkedIn.</p>
+              <p className="mt-5 text-base leading-relaxed text-ink/65 sm:text-lg">OrdinaryChat is designed for writing across the web.</p>
             </div>
             <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-2 sm:gap-7">
               <div className="rounded-3xl border hairline bg-white p-7 shadow-card sm:p-9">
@@ -508,7 +308,7 @@
       );
     }
 
-    function App() {
+    export default function HomePage() {
       return (
         <div className="paper-grain relative min-h-screen bg-paper text-ink">
           <Nav />
@@ -524,9 +324,3 @@
         </div>
       );
     }
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-  </script>
-</body>
-</html>
