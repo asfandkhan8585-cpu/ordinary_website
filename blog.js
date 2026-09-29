@@ -10,7 +10,7 @@ function postLink(slug) {
 
 function postCard(post, featured = false) {
   const tag = `<p class="post-category">${post.category}</p>`;
-  const meta = `<p class="post-meta"><time datetime="${post.date}">${formatPostDate(post.date)}</time><span aria-hidden="true">·</span>${post.readingTime}</p>`;
+  const meta = `<p class="post-meta"><time datetime="${post.date}">${formatPostDate(post.date)}</time></p>`;
   return `<article class="${featured ? 'featured-post' : 'post-card'}">${tag}<h2 class="font-display"><a href="${postLink(post.slug)}">${post.title}</a></h2><p class="post-description">${post.description}</p>${meta}<a class="post-link" href="${postLink(post.slug)}" aria-label="Read ${post.title}">Read post <span aria-hidden="true">→</span></a></article>`;
 }
 

@@ -19,7 +19,7 @@ async function renderArticle() {
   const post = posts.find((item) => item.slug === slug);
   if (!post) throw new Error('Post not found.');
   setArticleMetadata(post);
-  document.getElementById('article').innerHTML = `<article><a class="back-link" href="blog.html">← Blog posts</a><p class="post-category">${post.category}</p><h1 class="font-display">${post.title}</h1><p class="article-description">${post.description}</p><p class="post-meta"><time datetime="${post.date}">${articleDate(post.date)}</time><span aria-hidden="true">·</span>${post.readingTime}</p><div class="article-content">${post.content.map((paragraph) => `<p>${paragraph}</p>`).join('')}</div></article>`;
+  document.getElementById('article').innerHTML = `<article><a class="back-link" href="blog.html">← Blog posts</a><p class="post-category">${post.category}</p><h1 class="font-display">${post.title}</h1><p class="article-description">${post.description}</p><p class="post-meta"><time datetime="${post.date}">${articleDate(post.date)}</time></p><div class="article-content">${post.content.map((paragraph) => `<p>${paragraph}</p>`).join('')}</div></article>`;
 }
 
 renderArticle().catch(() => {
